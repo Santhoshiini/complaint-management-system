@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File New Complaint</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto p-8 max-w-2xl">
+        <h1 class="text-4xl font-bold text-slate-800 mb-6">File a New Complaint</h1>
+        <!-- This form MUST have th:action, th:object, and method="post" -->
+        <form th:action="@{/complaints/new}" th:object="${complaint}" method="post" class="bg-white p-8 rounded-lg shadow-md space-y-6">
+            
+            <!-- This block shows validation errors from the controller -->
+            <div th:if="${#fields.hasErrors('*')}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <strong class="font-bold">Error! Please check your input.</strong>
+                <ul class="list-disc ml-5 mt-2">
+                    <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+                </ul>
+            </div>
+
+            <!-- Each input MUST use th:field to link to the complaint object -->
+            <div><label for="title" class="block text-sm font-medium text-gray-700">Title</label><input type="text" id="title" th:field="*{title}" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></div>
+            <div><label for="reporter" class="block text-sm font-medium text-gray-700">Your Name (Reporter)</label><input type="text" id="reporter" th:field="*{reporter}" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div><label for="category" class="block text-sm font-medium text-gray-700">Category</label><select id="category" th:field="*{category}" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"><option value="">-- Select a Category --</option><option th:each="cat : ${categories}" th:value="${cat}" th:text="${cat}"></option></select></div>
+                <div><label for="city" class="block text-sm font-medium text-gray-700">City</label><select id="city" th:field="*{city}" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"><option value="">-- Select a City --</option><option th:each="c : ${cities}" th:value="${c}" th:text="${c}"></option></select></div>
+            </div>
+            <div><label for="description" class="block text-sm font-medium text-gray-700">Full Description</label><textarea id="description" th:field="*{description}" rows="4" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></textarea></div>
+            <div class="flex justify-end space-x-4 pt-4"><a href="/" class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg">Cancel</a><button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">Submit Complaint</button></div>
+        </form>
+    </div>
+</body>
+</html>
+

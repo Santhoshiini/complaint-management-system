@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaint Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+    <div class="container mx-auto p-8">
+        <a href="/" class="mb-6 inline-block bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg">&larr; Back to Queue</a>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 space-y-6">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <div class="flex justify-between items-start"><h1 class="text-3xl font-bold text-slate-800" th:text="${complaint.title}"></h1><span class="px-3 py-1 text-sm font-semibold rounded-full" th:text="${complaint.status.toString().replace('_', ' ')}" th:classappend="${complaint.status.name() == 'OPEN' ? 'bg-blue-100 text-blue-800' : complaint.status.name() == 'IN_PROGRESS' ? 'bg-yellow-100 text-yellow-800' : complaint.status.name() == 'RESOLVED' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}"></span></div>
+                    <p class="text-sm text-gray-500 mt-1" th:text="'Reported by ' + ${complaint.reporter} + ' on ' + ${#temporals.format(complaint.createdAt, 'dd-MMM-yyyy HH:mm')}"></p>
+                    <p class="mt-4 text-gray-700" th:text="${complaint.description}"></p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-bold mb-4">Admin Actions</h2>
+                    <form th:action="@{/complaints/update}" method="post" class="space-y-4"><input type="hidden" name="complaintId" th:value="${complaint.id}" /><div><label for="newStatus" class="block text-sm font-medium text-gray-700">Change Status</label><select id="newStatus" name="newStatus" class="mt-1 block w-full pl-3 pr-10 py-2 border-gray-300 rounded-md"><option th:each="s : ${statuses}" th:value="${s}" th:text="${s.toString().replace('_', ' ')}" th:selected="${s == complaint.status}"></option></select></div><div><label for="note" class="block text-sm font-medium text-gray-700">Add Note / Update</label><textarea id="note" name="note" rows="3" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm"></textarea></div><button type="submit" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg">Submit Update</button></form>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-bold mb-6">Complaint Timeline</h2>
+                <div class="relative border-l-2 border-gray-200 pl-6 space-y-8">
+                    <div th:each="log : ${complaint.updateLogs}" class="relative"><div class="absolute -left-[35px] top-1 h-4 w-4 rounded-full bg-gray-400 border-4 border-white"></div><p class="text-sm font-medium text-gray-800" th:text="${log.note}"></p><p class="text-xs text-gray-500" th:text="'By ' + ${log.performedBy} + ' on ' + ${#temporals.format(log.createdAt, 'dd-MMM-yyyy HH:mm')}"></p><p class="text-xs text-gray-500 mt-1">Status set to: <span class="font-semibold" th:text="${log.statusAfter}"></span></p></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
