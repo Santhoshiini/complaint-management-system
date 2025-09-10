@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaint Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Complaint Management System</h1>
+        <nav>
+            <button onclick="showPage('new-complaint')">New Complaint</button>
+            <button onclick="showPage('my-complaints')">My Complaints</button>
+            <button onclick="showPage('admin-queue')">Admin Queue</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- New Complaint Page -->
+        <div id="new-complaint" class="page active">
+            <h2>File New Complaint</h2>
+            <form id="complaint-form">
+                <input type="text" id="reporterName" placeholder="Your Name" required>
+                <input type="text" id="category" placeholder="Category (e.g., Internet, Water)" required>
+                <input type="text" id="city" placeholder="City" required>
+                <input type="text" id="title" placeholder="Complaint Title" required>
+                <textarea id="description" placeholder="Detailed Description" required></textarea>
+                <button type="submit">Submit Complaint</button>
+            </form>
+        </div>
+
+        <!-- My Complaints Page -->
+        <div id="my-complaints" class="page">
+            <h2>My Complaints</h2>
+            <div id="complaints-list" class="complaints-container"></div>
+        </div>
+
+        <!-- Admin Queue Page -->
+        <div id="admin-queue" class="page">
+            <h2>Admin Dashboard</h2>
+            <div class="filter-section">
+                <label>Filter by Status:
+                    <select id="status-filter" onchange="loadAdminComplaints()">
+                        <option value="">ALL</option>
+                        <option value="OPEN">OPEN</option>
+                        <option value="IN_PROGRESS">IN_PROGRESS</option>
+                        <option value="RESOLVED">RESOLVED</option>
+                        <option value="CLOSED">CLOSED</option>
+                    </select>
+                </label>
+            </div>
+            <div id="admin-complaints-list" class="complaints-container"></div>
+        </div>
+
+        <!-- Complaint Detail Page -->
+        <div id="complaint-detail" class="page">
+            <h2>Complaint Details</h2>
+            <div id="detail-content"></div>
+            <div id="timeline" class="timeline"></div>
+            <button onclick="showPage('my-complaints')">Back to List</button>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
